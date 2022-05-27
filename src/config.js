@@ -1,0 +1,30 @@
+let MAP_CONST = MAP_CONST || {};
+
+MAP_CONST.NUM_OF_ROW = 7;
+MAP_CONST.NUM_OF_COL = 7;
+
+MAP_CONST.ROW_Z_ORDER = 7;
+
+MAP_CONST.CELL = {
+    WIDTH: 77,
+    HEIGHT: 77,
+};
+
+MAP_CONST.MOVED_SPEED = {
+    SLOW: 1,
+    MEDIUM: 2,
+    FAST: 3,
+};
+
+MAP_CONST.MOVE_TYPE = {
+    WALK: 1,
+    RUN: 2,
+    FLY: 3,
+};
+
+MAP_CONST.DIRECTION = {
+    UP: 'UP',
+    DOWN: 'DOWN',
+    LEFT: 'LEFT',
+    RIGHT: 'RIGHT',
+};
