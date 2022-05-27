@@ -11,9 +11,9 @@ MAP_CONST.CELL = {
 };
 
 MAP_CONST.MOVED_SPEED = {
-    SLOW: 1,
-    MEDIUM: 2,
-    FAST: 3,
+    SLOW: 50,
+    MEDIUM: 100,
+    FAST: 50,
 };
 
 MAP_CONST.MOVE_TYPE = {

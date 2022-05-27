@@ -12,7 +12,9 @@ const resources = {
     Map_forest_obstacle_3: './res/images/map_forest_obstacle_3.png',
     Map_house: './res/images/map_house.png',
     Map_monster_gate: './res/images/map_monster_gate_player.png',
-    Monster_golem_run: './res/images/monster/golem/monster_golem_run_',
+    Monster_golem_run_prefix: './res/images/monster/golem/monster_golem_run_',
+    Monster_ninja_run_prefix: './res/images/monster/ninja/monster_ninja_run_',
+    Map_decoration_rock_0003: './res/images/map_decoration_rock_0003.png',
 };
 
 // const golem_resource = {

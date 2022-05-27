@@ -78,12 +78,11 @@ var MapLayer = cc.Layer.extend({
         //         this.addChild(land, z_order - j);
         //     }
         // }
-        let land = new cc.Sprite(resources.Map_cell_0);
+        let land = new cc.Sprite(resources.Map_decoration_rock_0003);
         land.setPosition(
             i * land.width + land.width / 2,
             j * land.width + land.width / 2
         );
-        land.setColor(cc.color(0, 0, 0));
         this.addChild(land, z_order - j);
     },
 
@@ -212,11 +211,11 @@ var MapLayer = cc.Layer.extend({
         this.shortestPathCoordinates = this.findShortestPathToGate();
         // cc.log(JSON.stringify(path));
 
-        for (let i = 0; i < this.shortestPathCoordinates.length; i++) {
-            this.addLand(
-                this.shortestPathCoordinates[i][0],
-                this.shortestPathCoordinates[i][1]
-            );
-        }
+        // for (let i = 0; i < this.shortestPathCoordinates.length; i++) {
+        //     this.addLand(
+        //         this.shortestPathCoordinates[i][0],
+        //         this.shortestPathCoordinates[i][1]
+        //     );
+        // }
     },
 });

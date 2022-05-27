@@ -1,4 +1,11 @@
 let MonsterLayer = cc.Layer.extend({
+    monsterType: [
+        MonsterType.GOLEM,
+        MonsterType.NINJA,
+        MonsterType.DARK_GIANT,
+        MonsterType.DESERT_KING,
+        MonsterType.DRAGON,
+    ],
     ctor: function (scene) {
         this.scene = scene;
         this._super();
@@ -7,8 +14,29 @@ let MonsterLayer = cc.Layer.extend({
     },
 
     init: function () {
-        this.monster = new MonsterSprite(this);
+        // this.monster = new MonsterSprite(this, MonsterType.Ninja);
         // this.addChild(this.monster);
+        this.spawnMonster();
+    },
+
+    spawnMonster: function () {
+        /* let monsterType =
+            this.monsterType[
+                Math.floor(Math.random() * this.monsterType.length)
+            ];
+        this.monster = new MonsterSprite(this, monsterType);
+        this.addChild(this.monster); */
+        setInterval(
+            function () {
+                let monsterType =
+                    this.monsterType[
+                        Math.floor(Math.random() * this.monsterType.length)
+                    ];
+                cc.log('MonsterType: ' + monsterType.name);
+                monster = new MonsterSprite(this, monsterType);
+            }.bind(this),
+            2000
+        );
     },
 });
 
@@ -17,22 +45,26 @@ let MonsterSprite = cc.Sprite.extend({
     shortestPathCoordinates: [],
     passedCells: 0,
     curDirection: MAP_CONST.DIRECTION.UP,
-    actions: {
-        UP: null,
-        DOWN: null,
-        LEFT: null,
-        RIGHT: null,
-    },
 
-    aimFrames: {
-        UP: [],
-        DOWN: [],
-        RIGHT: [],
-    },
-
-    ctor: function (layer) {
+    ctor: function (layer, monsterType) {
         this._super();
-        this.initAimFrames();
+        this.actions = {
+            UP: null,
+            DOWN: null,
+            LEFT: null,
+            RIGHT: null,
+        };
+        this.monsterType = null;
+
+        this.aimFrames = {
+            UP: [],
+            DOWN: [],
+            RIGHT: [],
+        };
+        this.monsterType = monsterType;
+        // cc.log('constructor: ' + this.monsterType);
+
+        this.initAimFrames(monsterType);
 
         layer.addChild(this);
 
@@ -55,25 +87,31 @@ let MonsterSprite = cc.Sprite.extend({
         this.scheduleUpdate();
     },
 
-    initAimFrames: function () {
-        this.loadAimFramesDirection(MAP_CONST.DIRECTION.UP);
+    initAimFrames: function (monsterType) {
+        this.loadAimFramesDirection(MAP_CONST.DIRECTION.UP, monsterType);
 
-        this.loadAimFramesDirection(MAP_CONST.DIRECTION.DOWN);
+        this.loadAimFramesDirection(MAP_CONST.DIRECTION.DOWN, monsterType);
 
-        this.loadAimFramesDirection(MAP_CONST.DIRECTION.RIGHT);
+        this.loadAimFramesDirection(MAP_CONST.DIRECTION.RIGHT, monsterType);
     },
 
-    loadAimFramesDirection: function (direction) {
+    loadAimFramesDirection: function (direction, monsterType) {
         startIndex =
-            MonsterType.Golem.imageIndexByDirection[direction].startIndex;
-        endIndex = MonsterType.Golem.imageIndexByDirection[direction].endIndex;
+            this.monsterType.imageIndexByDirection[direction].startIndex;
+        endIndex = this.monsterType.imageIndexByDirection[direction].endIndex;
         for (let i = startIndex; i <= endIndex; i++) {
+            let sprite = cc.Sprite.create(
+                this.monsterType.imagePathPrefix +
+                    (i >= 100 ? '0' : i >= 10 ? '00' : '000') +
+                    i +
+                    '.png'
+            );
             let frame = cc.SpriteFrame.create(
-                resources.Monster_golem_run +
-                    (i >= 10 ? '00' : '000') +
+                this.monsterType.imagePathPrefix +
+                    (i >= 100 ? '0' : i >= 10 ? '00' : '000') +
                     i +
                     '.png',
-                cc.rect(0, 0, 168, 168)
+                cc.rect(0, 0, sprite.width, sprite.height)
             );
             frame.retain();
             this.aimFrames[direction].push(frame);
@@ -103,8 +141,6 @@ let MonsterSprite = cc.Sprite.extend({
         //     this.stopAction(this.actions[prevDirection]);
         //     cc.log('prev: ' + prevDirection + ' nextDirection: ' + nextDirection);
         // }
-        cc.log('prev: ' + prevDirection + ' nextDirection: ' + nextDirection);
-
         this.stopAllActions();
         this.playAnimation(nextDirection);
     },
@@ -126,7 +162,6 @@ let MonsterSprite = cc.Sprite.extend({
             ),
             animate = cc.Animate.create(animation);
         this.actions[curDirection] = cc.RepeatForever.create(animate);
-        cc.log(this.actions[curDirection]);
         this.runAction(this.actions[curDirection]);
         // }
     },
